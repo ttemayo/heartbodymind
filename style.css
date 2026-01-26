@@ -1,0 +1,66 @@
+:root{
+  --bg: #0f1720;
+  --card: #ffffff;
+  --muted: #9aa4af;
+  --accent: #6c5ce7;
+  --text: #0b1220;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:linear-gradient(180deg,#071025 0%, #0f1720 100%);
+  color:var(--card);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+main#app{
+  width:100%;
+  max-width:760px;
+  background: #07142a;
+  border-radius:10px;
+  padding:24px;
+  box-shadow:0 8px 30px rgba(2,6,23,0.6);
+}
+header h1{
+  margin:0 0 6px 0;
+  color:var(--card);
+  font-size:1.4rem;
+}
+.subtitle{ color:var(--muted); margin:0; font-size:0.95rem;}
+
+#progress{ background:rgba(255,255,255,0.06); height:8px; border-radius:6px; margin:16px 0;}
+#progress-bar{ background:linear-gradient(90deg,var(--accent),#00d4ff); height:100%; border-radius:6px; width:0% }
+
+#question-box{ background: rgba(255,255,255,0.03); padding:18px; border-radius:8px; margin-top:12px }
+#question-title{ margin:0 0 12px 0; color:var(--card); font-size:1.1rem }
+#choices{ display:grid; gap:10px }
+
+.choice{
+  background: #0b1220;
+  border:1px solid rgba(255,255,255,0.04);
+  color:var(--card);
+  padding:12px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:transform .12s ease, background .12s ease;
+  user-select:none;
+}
+.choice:hover{ transform:translateY(-3px) }
+.choice:active{ transform:translateY(0) }
+
+.hidden{ display:none !important }
+
+#result{ text-align:center; padding:14px }
+#result-card{ background: rgba(255,255,255,0.03); border-radius:10px; padding:18px; margin:12px auto; max-width:520px }
+#result-label{ font-weight:700; font-size:1.5rem; color:var(--accent) }
+#result-desc{ color:var(--card); margin:8px 0 0 0 }
+
+.result-actions{ display:flex; gap:8px; justify-content:center; margin-top:12px }
+.result-actions button{ padding:8px 12px; border-radius:8px; border:0; background:var(--accent); color:white; cursor:pointer }
+
+footer{ margin-top:18px; text-align:center; color:var(--muted); font-size:0.85rem }
+.disclaimer{ color:var(--muted); font-size:0.85rem; margin-top:8px }

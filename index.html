@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Parody Personality Quiz — Heart, Body, Mind</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main id="app">
+    <header>
+      <h1>Which One Are You? (Parody)</h1>
+      <p class="subtitle">Answers don't matter. Results are randomly assigned for maximum chaos.</p>
+    </header>
+
+    <section id="quiz" aria-live="polite">
+      <div id="progress">
+        <div id="progress-bar" style="width:0%"></div>
+      </div>
+
+      <div id="question-box">
+        <h2 id="question-title">Loading…</h2>
+        <div id="choices" role="list"></div>
+      </div>
+    </section>
+
+    <section id="result" class="hidden" aria-live="polite">
+      <h2>Your Result</h2>
+      <div id="result-card">
+        <div id="result-label"></div>
+        <p id="result-desc"></p>
+      </div>
+
+      <div class="result-actions">
+        <button id="retake">Retake</button>
+        <button id="copy-link">Copy share link</button>
+      </div>
+
+      <p class="disclaimer">Parody result: for fun only.</p>
+    </section>
+
+    <footer>
+      <small>Made for laughs • Deploy on GitHub Pages</small>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
