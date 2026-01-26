@@ -3,19 +3,44 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Parody Personality Quiz — Heart, Body, Mind</title>
+  <title>Which type of Melee Player are you? — Heart, Body, Mind</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main id="app">
     <header>
-      <h1>Which One Are You? (Parody)</h1>
-      <p class="subtitle">Answers don't matter. Results are randomly assigned for maximum chaos.</p>
+      <h1>Which One Are You?</h1>
+      <p class="subtitle">Please answer these questions truthfully and honestly, to the best of your ability.</p>
     </header>
 
-    <section id="quiz" aria-live="polite">
-      <div id="progress">
-        <div id="progress-bar" style="width:0%"></div>
+    <!-- Landing / intro screen -->
+    <section id="landing" aria-hidden="false">
+      <div class="hero">
+        <!-- Replace "hero.png" with your own image file in the repo root -->
+        <!-- Landscape hero image around 1200 × 800 px recommended -->
+        <img src="hero.png" alt="Quiz hero graphic" id="hero-img"/>
+      </div>
+
+      <!-- disclaimer right under hero, then tiny line -->
+      <div class="landing-copy">
+        <p class="landing-disclaimer">
+          This is a totally serious and scientific quiz that absolutely measures your true Melee soul.
+        </p>
+        <p class="tiny">Tap start to begin. Works on mobile and desktop.</p>
+      </div>
+
+      <div class="start-wrap">
+        <button id="start-btn" class="cta">Start the Test</button>
+      </div>
+    </section>
+
+    <!-- Quiz section (hidden until Start) -->
+    <section id="quiz" class="hidden" aria-live="polite" aria-hidden="true">
+      <div id="progress-row">
+        <button id="back-btn" class="back hidden" aria-hidden="true">← Back</button>
+        <div id="progress">
+          <div id="progress-bar" style="width:0%"></div>
+        </div>
       </div>
 
       <div id="question-box">
@@ -24,23 +49,33 @@
       </div>
     </section>
 
-    <section id="result" class="hidden" aria-live="polite">
+    <!-- Result -->
+    <section id="result" class="hidden" aria-live="polite" aria-hidden="true">
       <h2>Your Result</h2>
       <div id="result-card">
         <div id="result-label"></div>
+
+        <!-- result image placeholder -->
+        <div id="result-image-wrap">
+          <img id="result-img" src="" alt="" class="hidden"/>
+        </div>
+
         <p id="result-desc"></p>
+
+        <!-- percentages -->
+        <div id="percentages" class="percent-list" aria-hidden="true"></div>
       </div>
 
       <div class="result-actions">
-        <button id="retake">Retake</button>
-        <button id="copy-link">Copy share link</button>
+        <button id="retake" class="secondary">Retake</button>
+        <button id="copy-link" class="secondary">Copy share link</button>
       </div>
 
-      <p class="disclaimer">Parody result: for fun only.</p>
+      <p class="disclaimer">This is a very serious and important Melee Personality Test that decides your melee future.</p>
     </section>
 
     <footer>
-      <small>Made for laughs • Deploy on GitHub Pages</small>
+      <small>Made for fun • twitch.tv/ • youtube.com/</small>
     </footer>
   </main>
 
