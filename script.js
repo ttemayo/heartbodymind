@@ -3,10 +3,10 @@
 // Updated: randomized question order per-start + Back button support.
 
 const QUESTIONS = [
-  { q: "Pick a snack during a tense match", choices: ["Chips", "Pickles", "Protein bar"] },
-  { q: "Preferred warm-up", choices: ["Stretch", "Blink training", "Meditate"] },
+  { q: "Pick a snack before a tense match", choices: ["Chips", "Pickles", "Protein bar", "Nothing"] },
+  { q: "Preferred warm-up", choices: ["Stretch", "Blink training", "Meditate", "Fighting a CPU"] },
   { q: "Your grinder-friendly mantra", choices: ["One more", "Relax and win", "Just mash"] },
-  { q: "Favorite victory pose", choices: ["Fist pump", "Calm nod", "Chest flex"] },
+  { q: "Favorite victory pose", choices: ["Fist pump", "Calm nod", "Chair throw"] },
   { q: "Best post-match drink", choices: ["Soda", "Water", "Energy drink"] }
 ];
 
