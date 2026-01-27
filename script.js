@@ -1,12 +1,12 @@
 // PARODY quiz: answers don't matter. final result is random.
 // Small, dependency-free client-side script.
-// Updated: randomized question order per-start + Back button support.
+// Updated: randomized question order per-start, randomized choices per-question, Back support.
 
 const QUESTIONS = [
-  { q: "Pick a snack before a tense match", choices: ["Chips", "Pickles", "Protein bar", "Nothing"] },
-  { q: "Preferred warm-up", choices: ["Stretch", "Blink training", "Meditate", "Fighting a CPU"] },
-  { q: "Your grinder-friendly mantra", choices: ["One more", "Relax and win", "Just mash"] },
-  { q: "Favorite victory pose", choices: ["Fist pump", "Calm nod", "Chair throw"] },
+  { q: "Pick a food before ", choices: ["Chips", "Pickles", "Protein bar", "Nothing"] },
+  { q: "Preferred warm-up", choices: ["Stretch", "Blink training", "Meditate", "Comboing a CPU"] },
+  { q: "Your grinder mantra", choices: ["One more", "Relax and win", "Just mash"] },
+  { q: "Your pop off of choice", choices: ["Fist pump", "Calm nod", "Chair throw"] },
   { q: "Best post-match drink", choices: ["Soda", "Water", "Energy drink"] }
 ];
 
@@ -44,8 +44,8 @@ const retakeBtn = document.getElementById('retake');
 const copyBtn = document.getElementById('copy-link');
 
 let index = 0;                 // pointer into activeQuestions
-let activeQuestions = [];      // shuffled questions used for this run
-let answers = [];              // store chosen indices per question (for back)
+let activeQuestions = [];      // shuffled questions used for this run; each has its own shuffled choices
+let answers = [];              // store chosen choice *values* per question (strings)
 
 
 // utility: get URL param
@@ -82,11 +82,19 @@ function decodeToken(token){
   }
 }
 
-// Prepare a new run: shuffle questions and reset state
+// Prepare a new run: shuffle questions, and for each question shuffle its choices
 function prepareRun(){
-  activeQuestions = shuffleArray(QUESTIONS);
+  // shuffle the questions order
+  const shuffledQs = shuffleArray(QUESTIONS);
+  // for each question make a copy with shuffled choices
+  activeQuestions = shuffledQs.map(orig => {
+    return {
+      q: orig.q,
+      choices: shuffleArray(orig.choices.slice()) // shuffled copy
+    };
+  });
   index = 0;
-  answers = new Array(activeQuestions.length).fill(null);
+  answers = new Array(activeQuestions.length).fill(null); // store choice *strings*
 }
 
 // Render a question by index (from activeQuestions)
@@ -96,17 +104,19 @@ function renderQuestion(i){
   questionTitle.textContent = `Q${i+1}. ${q.q}`;
   choicesBox.innerHTML = '';
 
-  q.choices.forEach((c, j) => {
+  q.choices.forEach((choiceValue, j) => {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'choice';
     b.setAttribute('role','listitem');
-    b.textContent = c;
+    b.textContent = choiceValue;
 
-    // highlight if previously selected
-    if(answers[i] === j) b.classList.add('selected');
+    // highlight if previously selected (compare by value)
+    if(answers[i] !== null && answers[i] === choiceValue) {
+      b.classList.add('selected');
+    }
 
-    b.addEventListener('click', () => onChoose(i, j));
+    b.addEventListener('click', () => onChoose(i, choiceValue));
     choicesBox.appendChild(b);
   });
 
@@ -130,9 +140,9 @@ function renderQuestion(i){
   }
 }
 
-// Handle a choice: store answer, then move forward
-function onChoose(qi, choiceIndex){
-  answers[qi] = choiceIndex; // store so back can restore
+// Handle a choice: store answer (choice *value*), then move forward
+function onChoose(qi, choiceValue){
+  answers[qi] = choiceValue; // store the answer value so shuffling doesn't break highlighting
   // advance
   index++;
   if(index < activeQuestions.length){
