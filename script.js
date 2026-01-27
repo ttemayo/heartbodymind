@@ -1,7 +1,11 @@
 // PARODY quiz: answers don't matter. final result is random.
 // Small, dependency-free client-side script.
 // Updated: randomized question order per-start, randomized choices per-question, Back support.
+// NOTE: comments are intentionally preserved and should not be removed unless absolutely necessary.
 
+// ---------- QUESTIONS ----------
+// Each entry: { q: "question text", choices: [ ... ] }
+// We shuffle questions and shuffle choices per-run so order is unpredictable.
 const QUESTIONS = [
   { q: "Pick a food before ", choices: ["Chips", "Pickles", "Protein bar", "Nothing"] },
   { q: "Preferred warm-up", choices: ["Stretch", "Blink training", "Meditate", "Comboing a CPU"] },
@@ -10,24 +14,37 @@ const QUESTIONS = [
   { q: "Best post-match drink", choices: ["Soda", "Water", "Energy drink"] }
 ];
 
-// You can add an image filename (place the files in the repo root)
+// ---------- RESULTS ----------
+// You can add an image filename (place the files in assets/ by convention).
+// Keep image filenames consistent with the assets/ directory (assets/heart.png etc).
 const RESULTS = {
-  Heart: { title: "Heart"
-    , desc: "You win with passion. You rely on looking into the soul of your opponent and hard reading their options.", image: "heart.png" },
-  Body:  { title: "Body"
-    , desc: "You brute force your way to glory. You insist and focus on perfecting your punish game.", image: "body.png" },
-  Mind:  { title: "Mind"
-    , desc: "You overthink things and it works. You map out the matchups, and have flowcharts for situations that others probably don't even consider.", image: "mind.png" }
+  Heart: {
+    title: "Heart",
+    desc: "You win with passion. You rely on looking into the soul of your opponent and hard reading their options.",
+    image: "assets/heart.png"
+  },
+  Body: {
+    title: "Body",
+    desc: "You brute force your way to glory. You insist and focus on perfecting your punish game.",
+    image: "assets/body.png"
+  },
+  Mind: {
+    title: "Mind",
+    desc: "You overthink things and it works. You map out the matchups, and have flowcharts for situations that others probably don't even consider.",
+    image: "assets/mind.png"
+  }
 };
 
-// color mapping — keep these in sync with CSS :root variables
+// ---------- UI COLORS ----------
+// Keep these in sync with CSS variables in style.css if you change them.
 const COLORS = {
-  Heart: '#e02424',
-  Body:  '#16a34a',
-  Mind:  '#2563eb'
+  Heart: '#e02424', // red
+  Body:  '#16a34a', // green
+  Mind:  '#2563eb'  // blue
 };
 
-// DOM refs
+// ---------- DOM REFS ----------
+// Cache DOM nodes used by the script so code is easier to read.
 const landing = document.getElementById('landing');
 const startBtn = document.getElementById('start-btn');
 const backBtn = document.getElementById('back-btn');
@@ -43,28 +60,35 @@ const percentagesWrap = document.getElementById('percentages');
 const retakeBtn = document.getElementById('retake');
 const copyBtn = document.getElementById('copy-link');
 
-let index = 0;                 // pointer into activeQuestions
-let activeQuestions = [];      // shuffled questions used for this run; each has its own shuffled choices
-let answers = [];              // store chosen choice *values* per question (strings)
+// ---------- State ----------
+// index: pointer into activeQuestions
+// activeQuestions: the shuffled questions used for this run (each contains shuffled choices)
+// answers: store chosen choice *values* per question (use values so shuffling choices doesn't break recall)
+let index = 0;
+let activeQuestions = [];
+let answers = [];
 
+// ---------- Utilities ----------
 
-// utility: get URL param
+// Utility: read a URL param value
 function getParam(name){
   const url = new URL(window.location.href);
   return url.searchParams.get(name);
 }
 
-// Shuffle helper (Fisher-Yates)
+// Fisher-Yates shuffle helper: returns a new shuffled copy
 function shuffleArray(a){
   const arr = a.slice();
-  for(let i = arr.length -1; i>0; i--){
-    const j = Math.floor(Math.random()*(i+1));
+  for(let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
 }
 
-// encode/decode compact token (JSON -> base64)
+// Compact token encode/decode used to share a specific result via ?t=<token>
+// encodeToken: JSON -> base64 (URL safe enough for our purposes)
+// decodeToken: base64 -> JSON
 function encodeToken(obj){
   try {
     const str = JSON.stringify(obj);
@@ -82,28 +106,39 @@ function decodeToken(token){
   }
 }
 
-// Prepare a new run: shuffle questions, and for each question shuffle its choices
+// ---------- Run preparation ----------
+// prepareRun: shuffle questions and shuffle choices per question, reset state
 function prepareRun(){
-  // shuffle the questions order
+  // shuffle the questions order so each run is different
   const shuffledQs = shuffleArray(QUESTIONS);
-  // for each question make a copy with shuffled choices
+
+  // For each question create a shallow copy and shuffle its choice list
   activeQuestions = shuffledQs.map(orig => {
     return {
       q: orig.q,
       choices: shuffleArray(orig.choices.slice()) // shuffled copy
     };
   });
+
+  // Reset runtime state
   index = 0;
   answers = new Array(activeQuestions.length).fill(null); // store choice *strings*
 }
 
-// Render a question by index (from activeQuestions)
+// ---------- Rendering ----------
+
+// renderQuestion: display the question at index i (from activeQuestions)
+// - renders choices as large touch-friendly buttons
+// - highlights previously selected choice (by value)
 function renderQuestion(i){
   const total = activeQuestions.length;
   const q = activeQuestions[i];
-  questionTitle.textContent = `Q${i+1}. ${q.q}`;
-  choicesBox.innerHTML = '';
 
+  // question title (Q1. ... style)
+  questionTitle.textContent = `Q${i+1}. ${q.q}`;
+
+  // clear old choices then append new
+  choicesBox.innerHTML = '';
   q.choices.forEach((choiceValue, j) => {
     const b = document.createElement('button');
     b.type = 'button';
@@ -111,51 +146,56 @@ function renderQuestion(i){
     b.setAttribute('role','listitem');
     b.textContent = choiceValue;
 
-    // highlight if previously selected (compare by value)
-    if(answers[i] !== null && answers[i] === choiceValue) {
+    // if user previously answered this question, mark selection
+    if(answers[i] !== null && answers[i] === choiceValue){
       b.classList.add('selected');
     }
 
+    // clicking stores the *value* and advances
     b.addEventListener('click', () => onChoose(i, choiceValue));
     choicesBox.appendChild(b);
   });
 
-  // progress
-  progressBar.style.width = `${Math.round((i/total)*100)}%`;
+  // update progress bar (0..100)
+  progressBar.style.width = `${Math.round((i / total) * 100)}%`;
 
-  // back button visibility
+  // back button visibility (only show when not at first question)
   if(backBtn){
     if(i > 0){
       backBtn.classList.remove('hidden');
-      backBtn.setAttribute('aria-hidden','false');
+      backBtn.setAttribute('aria-hidden', 'false');
     } else {
       backBtn.classList.add('hidden');
-      backBtn.setAttribute('aria-hidden','true');
+      backBtn.setAttribute('aria-hidden', 'true');
     }
   }
 
-  // scroll into view for mobile
+  // jump question into view on small screens for UX
   if(window.innerWidth < 700){
     questionTitle.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 }
 
-// Handle a choice: store answer (choice *value*), then move forward
+// ---------- Interaction handlers ----------
+
+// Handle a choice: store answer (choiceValue) and move forward
 function onChoose(qi, choiceValue){
-  answers[qi] = choiceValue; // store the answer value so shuffling doesn't break highlighting
-  // advance
+  // store user's answer as the choice *value* (safe when we shuffle choices)
+  answers[qi] = choiceValue;
+
+  // advance pointer
   index++;
   if(index < activeQuestions.length){
     renderQuestion(index);
   } else {
-    // finished => pick random result + mock percentages
+    // run finished: we pick a random result (parody) and generate mock percentages
     const key = randomResultKey();
     const pct = randomPercentagesWithWinner(key);
     showResultWithPercent(key, pct);
   }
 }
 
-// Back button handler: go back one question
+// Back button: go back one question (if available)
 if(backBtn){
   backBtn.addEventListener('click', () => {
     if(index > 0){
@@ -165,13 +205,16 @@ if(backBtn){
   });
 }
 
-// Pick random result key
+// ---------- Result generation ----------
+
+// Random result key (Heart / Body / Mind)
 function randomResultKey(){
   const keys = Object.keys(RESULTS);
-  return keys[Math.floor(Math.random()*keys.length)];
+  return keys[Math.floor(Math.random() * keys.length)];
 }
 
-// Generate percentages so "winner" is highest; integers sum to 100
+// Generate mock percentages that sum to 100 and ensure the 'winner' is highest.
+// winner gets between 45 and 75, the remainder is split randomly.
 function randomPercentagesWithWinner(winnerKey){
   const winner = getRandomInt(45, 75);
   let remainder = 100 - winner;
@@ -184,12 +227,13 @@ function randomPercentagesWithWinner(winnerKey){
   out[keys[1]] = other2;
   return out;
 }
-function getRandomInt(min, max){ return Math.floor(Math.random()*(max-min+1)) + min; }
+function getRandomInt(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
 
 // Render percentages UI from object like {Heart:60, Body:25, Mind:15}
+// Bars are colored according to the COLORS mapping. Width animates from 0.
 function renderPercentages(pctObj){
   percentagesWrap.innerHTML = '';
-  const order = Object.keys(RESULTS);
+  const order = Object.keys(RESULTS); // keep consistent display order
   order.forEach(key => {
     const val = pctObj[key] ?? 0;
     const row = document.createElement('div');
@@ -205,10 +249,13 @@ function renderPercentages(pctObj){
     const bar = document.createElement('div');
     bar.className = 'percent-bar';
 
-    // color the bar according to the key
+    // apply per-key color (Heart/Body/Mind)
     const color = COLORS[key] || '#6c5ce7';
     bar.style.background = color;
-    bar.style.width = '0%'; // animate from 0
+
+    // start at 0 for animation, set final width after append
+    bar.style.width = '0%';
+
     const value = document.createElement('div');
     value.className = 'percent-value';
     value.textContent = `${val}%`;
@@ -219,25 +266,29 @@ function renderPercentages(pctObj){
     row.appendChild(value);
     percentagesWrap.appendChild(row);
 
-    // animate width shortly after adding to DOM
+    // animate width shortly after insertion
     setTimeout(() => { bar.style.width = `${val}%`; }, 50);
   });
-  percentagesWrap.setAttribute('aria-hidden','false');
+
+  percentagesWrap.setAttribute('aria-hidden', 'false');
 }
 
-// Show result and set encoded share token in URL
+// Show result with percentages and update URL with compact token (?t=...)
 function showResultWithPercent(key, pctObj){
+  // hide quiz
   quizSection.classList.add('hidden');
-  quizSection.setAttribute('aria-hidden','true');
+  quizSection.setAttribute('aria-hidden', 'true');
+
+  // populate result text
   const r = RESULTS[key];
   resultLabel.textContent = r.title;
   resultDesc.textContent = r.desc;
 
-  // set label color to match this result
+  // color the label to match the result
   const mainColor = COLORS[key] || '#6c5ce7';
   resultLabel.style.color = mainColor;
 
-  // result image if available
+  // result image: show if provided (images should be in assets/)
   if(r.image){
     resultImg.src = r.image;
     resultImg.alt = `${r.title} image`;
@@ -246,42 +297,45 @@ function showResultWithPercent(key, pctObj){
     resultImg.classList.add('hidden');
   }
 
-  // render percentages
+  // percentages UI
   renderPercentages(pctObj);
 
+  // reveal result section
   resultSection.classList.remove('hidden');
-  resultSection.setAttribute('aria-hidden','false');
+  resultSection.setAttribute('aria-hidden', 'false');
 
-  // update progress to full
+  // set progress bar to full
   progressBar.style.width = '100%';
 
-  // encode token and set short param `t`
+  // encode share token and update URL to allow direct opens
   const token = encodeToken({ r: key, p: pctObj });
   if(token){
     const url = new URL(window.location.href);
     url.searchParams.set('t', token);
-    url.searchParams.delete('result');
+    url.searchParams.delete('result'); // remove legacy param if present
     window.history.replaceState({}, '', url.toString());
   }
 }
 
-// Reset and retake (prepare a fresh randomized run)
+// ---------- Buttons: retake & copy ----------
+
+// Reset for a fresh randomized run (prepares new shuffled questions)
 retakeBtn.addEventListener('click', () => {
   prepareRun();
   index = 0;
   quizSection.classList.remove('hidden');
-  quizSection.setAttribute('aria-hidden','false');
+  quizSection.setAttribute('aria-hidden', 'false');
   resultSection.classList.add('hidden');
-  resultSection.setAttribute('aria-hidden','true');
+  resultSection.setAttribute('aria-hidden', 'true');
   resultImg.classList.add('hidden');
   percentagesWrap.innerHTML = '';
-  resultLabel.style.color = ''; // reset color
+  resultLabel.style.color = ''; // reset color style
   renderQuestion(0);
   progressBar.style.width = '0%';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// Copy share link
+// Copy share link to clipboard (fallback alert if not available)
 copyBtn.addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(window.location.href);
@@ -292,21 +346,22 @@ copyBtn.addEventListener('click', async () => {
   }
 });
 
-// If user loads with token ?t=... decode and show exact result
+// ---------- URL token handling for shared results ----------
+// if ?t=<token> present, decode and render exact result (used for share links)
 function checkUrlToken(){
   const token = getParam('t');
   if(token){
     const data = decodeToken(token);
     if(data && data.r && data.p){
-      // hide landing + quiz, show result with decoded percentages
+      // hide landing + quiz and show decoded result
       if(landing){
         landing.classList.add('hidden');
-        landing.setAttribute('aria-hidden','true');
+        landing.setAttribute('aria-hidden', 'true');
       }
       quizSection.classList.add('hidden');
-      quizSection.setAttribute('aria-hidden','true');
+      quizSection.setAttribute('aria-hidden', 'true');
 
-      // set image if any
+      // set image if present
       const r = RESULTS[data.r];
       if(r && r.image){
         resultImg.src = r.image;
@@ -316,22 +371,25 @@ function checkUrlToken(){
         resultImg.classList.add('hidden');
       }
 
-      // show label/desc
+      // label + desc (fall back to token values if not in RESULTS)
       const rr = RESULTS[data.r] || { title: data.r, desc: '' };
       resultLabel.textContent = rr.title || data.r;
       resultDesc.textContent = rr.desc || '';
 
-      // set label color
+      // color label
       resultLabel.style.color = COLORS[data.r] || '';
 
+      // percentages from token
       renderPercentages(data.p);
+
       resultSection.classList.remove('hidden');
-      resultSection.setAttribute('aria-hidden','false');
+      resultSection.setAttribute('aria-hidden', 'false');
       progressBar.style.width = '100%';
       return true;
     }
   }
-  // fallback for old ?result param (generate random percentages)
+
+  // backward compatibility: old ?result=Key param
   const old = getParam('result');
   if(old && RESULTS[old]){
     const pct = randomPercentagesWithWinner(old);
@@ -341,46 +399,48 @@ function checkUrlToken(){
   return false;
 }
 
-// Start button handler — prepare a shuffled run
+// ---------- Initial boot ----------
+// Start button will prepare a randomized run. Also support pressing Enter to start.
 if(startBtn){
   startBtn.addEventListener('click', () => {
     prepareRun();
     if(landing){
       landing.classList.add('hidden');
-      landing.setAttribute('aria-hidden','true');
+      landing.setAttribute('aria-hidden', 'true');
     }
     quizSection.classList.remove('hidden');
-    quizSection.setAttribute('aria-hidden','false');
-    // small delay so CSS can animate if needed then render
+    quizSection.setAttribute('aria-hidden', 'false');
+
+    // small delay to allow CSS animations; then render first question
     setTimeout(()=> renderQuestion(0), 80);
-    // ensure progress reset
+
+    // reset progress
     progressBar.style.width = '0%';
-    // scroll to quiz for mobile
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
 
-// allow keyboard start (Enter) on landing for accessibility
+// keyboard accessibility: Enter starts quiz from landing
 document.addEventListener('keydown', (e) => {
   if(e.key === 'Enter' && landing && !landing.classList.contains('hidden')){
     startBtn.click();
   }
 });
 
-// initial boot
+// On DOM ready: check token, otherwise show landing and wait for user to start
 document.addEventListener('DOMContentLoaded', () => {
   if(!checkUrlToken()){
-    // show landing if available, otherwise start quiz directly (start randomized run)
     if(landing){
       landing.classList.remove('hidden');
-      landing.setAttribute('aria-hidden','false');
+      landing.setAttribute('aria-hidden', 'false');
       quizSection.classList.add('hidden');
-      quizSection.setAttribute('aria-hidden','true');
+      quizSection.setAttribute('aria-hidden', 'true');
     } else {
+      // If no landing, auto-start a run
       prepareRun();
       renderQuestion(0);
       quizSection.classList.remove('hidden');
-      quizSection.setAttribute('aria-hidden','false');
+      quizSection.setAttribute('aria-hidden', 'false');
     }
   }
 });

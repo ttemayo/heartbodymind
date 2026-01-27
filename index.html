@@ -16,13 +16,15 @@
     <!-- Landing / intro screen -->
     <section id="landing" aria-hidden="false">
       <div class="hero">
-        <!-- Replace "hero.png" with your own image file in the repo root -->
-        <!-- Landscape hero image around 1200 × 800 px recommended -->
-        <img src="hero.png" alt="Quiz hero graphic" id="hero-img"/>
+        <!-- Hero image now lives in assets/ -->
+        <!-- Replace assets/hero.png with your own image file in the assets/ folder -->
+        <!-- Recommended hero size: 1200×800 (JPEG/WebP). If you supply multiple sizes, add srcset. -->
+        <img src="assets/hero.png" alt="Quiz hero graphic" id="hero-img"/>
       </div>
 
       <!-- disclaimer right under hero, then tiny line -->
       <div class="landing-copy">
+        <!-- This copy is intentionally tongue-in-cheek: results are random -->
         <p class="landing-disclaimer">
           This is a totally serious and scientific quiz that absolutely measures your true Melee soul.
         </p>
@@ -37,6 +39,7 @@
     <!-- Quiz section (hidden until Start) -->
     <section id="quiz" class="hidden" aria-live="polite" aria-hidden="true">
       <div id="progress-row">
+        <!-- Back button appears when user passes first question -->
         <button id="back-btn" class="back hidden" aria-hidden="true">← Back</button>
         <div id="progress">
           <div id="progress-bar" style="width:0%"></div>
@@ -57,7 +60,8 @@
 
         <!-- result image placeholder -->
         <div id="result-image-wrap">
-          <img id="result-img" src="" alt="" class="hidden"/>
+          <!-- result image is in assets/ and lazy-loads (only loaded when shown) -->
+          <img id="result-img" src="" alt="" class="hidden" loading="lazy"/>
         </div>
 
         <p id="result-desc"></p>
