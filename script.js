@@ -7,7 +7,7 @@
 // Each entry: { q: "question text", choices: [ ... ] }
 // We shuffle questions and shuffle choices per-run so order is unpredictable.
 const QUESTIONS = [
-  { q: "Pick a food before ", choices: ["Chips", "Pickles", "Protein bar", "Nothing"] },
+  { q: "Pick a food before your next set", choices: ["Chips", "Fruit", "Protein/Granola bar", "Nothing"] },
   { q: "Preferred warm-up", choices: ["Stretch", "Blink training", "Meditate", "Comboing a CPU"] },
   { q: "Your grinder mantra", choices: ["One more", "Relax and win", "Just mash"] },
   { q: "Your pop off of choice", choices: ["Fist pump", "Calm nod", "Chair throw"] },
