@@ -24,7 +24,7 @@
       <div class="hero">
         <!-- Hero image now lives in assets/ -->
         <!-- Replace assets/hero.png with your own image file in the assets/ folder -->
-        <!-- Recommended hero size: 1800x640 (JPEG/WebP). If you supply multiple sizes, add srcset. -->
+        <!-- Recommended hero size: 1800×640 (JPEG/WebP). If you supply multiple sizes, add srcset. -->
         <img src="assets/hero.png" alt="Quiz hero graphic" id="hero-img"/>
       </div>
 
@@ -53,6 +53,11 @@
       </div>
 
       <div id="question-box">
+        <!-- OPTIONAL question image (shows only when question.image is provided) -->
+        <div id="question-image-wrap" class="question-image hidden" aria-hidden="true">
+          <img id="question-img" src="" alt="" class="hidden" loading="lazy"/>
+        </div>
+
         <h2 id="question-title">Loading…</h2>
         <div id="choices" role="list"></div>
       </div>

@@ -1,10 +1,13 @@
 // PARODY quiz: answers don't matter. final result is random.
 // Small, dependency-free client-side script.
 // Updated: randomized question order per-start, randomized choices per-question, Back support.
+// NOTE: comments are intentionally preserved and should not be removed unless absolutely necessary.
 
 // ---------- QUESTIONS ----------
 // Each entry: { q: "question text", choices: [ ... ] }
-// We shuffle questions and shuffle choices per-run so order is unpredictable.
+// You may optionally add an `image` property to any question:
+//   { q: "Example", choices: [...], image: "assets/q1-1800x640.png" }
+// If no `image` property is present, no space will be shown.
 const QUESTIONS = [
   { q: "Pick a food before your set", choices: ["Chips", "Fruit", "Granola or Protein", "None/Other"] },
   { q: "Preferred warm-up", choices: ["Stretch", "Blink training", "Meditate", "Comboing a CPU"] },
@@ -15,9 +18,6 @@ const QUESTIONS = [
 ];
 
 // ---------- RESULTS ----------
-// You can add an image filename (place the files in assets/ by convention).
-// Keep image filenames consistent with the assets/ directory (assets/heart.png etc).
-// Added `notables` arrays for each type to populate the new "Other notable players" area.
 const RESULTS = {
   Heart: {
     title: "Heart",
@@ -61,6 +61,8 @@ const resultDesc = document.getElementById('result-desc');
 const resultImg = document.getElementById('result-img');
 const percentagesWrap = document.getElementById('percentages');
 const notablesWrap = document.getElementById('notables'); // NEW: area for notable players
+const questionImageWrap = document.getElementById('question-image-wrap'); // NEW
+const questionImg = document.getElementById('question-img'); // NEW
 const retakeBtn = document.getElementById('retake');
 const copyBtn = document.getElementById('copy-link');
 
@@ -104,7 +106,8 @@ function prepareRun(){
   const shuffledQs = shuffleArray(QUESTIONS);
   activeQuestions = shuffledQs.map(orig => ({
     q: orig.q,
-    choices: shuffleArray(orig.choices.slice())
+    choices: shuffleArray(orig.choices.slice()),
+    image: orig.image // optional; may be undefined
   }));
   index = 0;
   answers = new Array(activeQuestions.length).fill(null);
@@ -114,8 +117,27 @@ function prepareRun(){
 function renderQuestion(i){
   const total = activeQuestions.length;
   const q = activeQuestions[i];
+
+  // QUESTION IMAGE: show only if q.image exists (no empty space otherwise)
+  if(questionImg && questionImageWrap){
+    if(q.image){
+      questionImg.src = q.image;
+      questionImg.alt = `Image for question ${i+1}`;
+      questionImg.classList.remove('hidden');
+      questionImageWrap.classList.remove('hidden');
+      questionImageWrap.setAttribute('aria-hidden', 'false');
+    } else {
+      questionImg.src = '';
+      questionImg.alt = '';
+      questionImg.classList.add('hidden');
+      questionImageWrap.classList.add('hidden');
+      questionImageWrap.setAttribute('aria-hidden', 'true');
+    }
+  }
+
   questionTitle.textContent = `Q${i+1}. ${q.q}`;
   choicesBox.innerHTML = '';
+
   q.choices.forEach((choiceValue, j) => {
     const b = document.createElement('button');
     b.type = 'button';
@@ -126,6 +148,7 @@ function renderQuestion(i){
     b.addEventListener('click', () => onChoose(i, choiceValue));
     choicesBox.appendChild(b);
   });
+
   progressBar.style.width = `${Math.round((i/total)*100)}%`;
   if(backBtn){
     if(i > 0){

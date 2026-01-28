@@ -107,6 +107,27 @@ header h1{
 /* Question box */
 #question-box{ background: var(--surface); padding:16px; border-radius:10px; margin-top:8px }
 
+/* QUESTION IMAGE (optional) */
+.question-image{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:12px; /* breathing room between image and question title */
+}
+#question-img{
+  width:100%;
+  max-height:220px; /* scales; matches hero aspect but smaller for UX */
+  height:auto;
+  object-fit:contain;
+  object-position:center;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.04);
+  background:linear-gradient(180deg,#081226,#091a2e);
+}
+/* .hidden works across elements to remove empty space when no image is present */
+.hidden{ display:none !important }
+
 /* Make the question title slightly larger than choices */
 #question-title{
   margin:0 0 12px 0;
@@ -196,14 +217,13 @@ header h1{
 .result-actions{ display:flex; gap:8px; justify-content:center; margin-top:12px; flex-wrap:wrap }
 .result-actions button{ padding:10px 14px; border-radius:8px; border:0; background:rgba(255,255,255,0.06); color:var(--card); cursor:pointer }
 
-/* Utilities */
-.hidden{ display:none !important }
 footer{ margin-top:6px; text-align:center; color:var(--muted); font-size:0.85rem }
 
 /* Responsive tweaks */
 @media (max-width:840px){
   /* Reduce result image on tablet/phone */
   #result-image-wrap{ width:260px; height:260px }
+  #question-img{ max-height:180px }
 }
 @media (max-width:660px){
   main#app{ padding:16px }
@@ -216,4 +236,5 @@ footer{ margin-top:6px; text-align:center; color:var(--muted); font-size:0.85rem
   .percent-label{ width:60px; font-size:0.9rem }
   .percent-value{ width:44px; font-size:0.9rem }
   .notables{ font-size:0.9rem }
+  #question-img{ max-height:140px }
 }
