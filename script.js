@@ -7,11 +7,12 @@
 // Each entry: { q: "question text", choices: [ ... ] }
 // We shuffle questions and shuffle choices per-run so order is unpredictable.
 const QUESTIONS = [
-  { q: "Pick a food before ", choices: ["Chips", "Pickles", "Protein bar", "Nothing"] },
+  { q: "Pick a food before your set", choices: ["Chips", "Fruit", "Granola or Protein", "None/Other"] },
   { q: "Preferred warm-up", choices: ["Stretch", "Blink training", "Meditate", "Comboing a CPU"] },
-  { q: "Your grinder mantra", choices: ["One more", "Relax and win", "Just mash"] },
-  { q: "Your pop off of choice", choices: ["Fist pump", "Calm nod", "Chair throw"] },
-  { q: "Best post-match drink", choices: ["Soda", "Water", "Energy drink"] }
+  { q: "Your mantra", choices: ["Do whatever it takes to win", "Turn my brain off and schmove", "I love hanging spending quality time with my friend"] },
+  { q: "Your pop-off of choice", choices: ["Fist pump", "Calm nod", "Chair throw"] },
+  { q: "Best post-match drink", choices: ["Soda", "Water", "Energy drink"] },
+  { q: "Favorite current top 3 player", choices: ["Zain", "Cody Schwab", "Hungrybox"] }
 ];
 
 // ---------- RESULTS ----------
