@@ -7,7 +7,7 @@
 // Each entry: { q: "question text", choices: [ ... ] }
 // We shuffle questions and shuffle choices per-run so order is unpredictable.
 const QUESTIONS = [
-  { q: "Pick a food before your next set", choices: ["Chips", "Fruit", "Protein/Granola bar", "Nothing"] },
+  { q: "Pick a food before ", choices: ["Chips", "Pickles", "Protein bar", "Nothing"] },
   { q: "Preferred warm-up", choices: ["Stretch", "Blink training", "Meditate", "Comboing a CPU"] },
   { q: "Your grinder mantra", choices: ["One more", "Relax and win", "Just mash"] },
   { q: "Your pop off of choice", choices: ["Fist pump", "Calm nod", "Chair throw"] },
@@ -45,6 +45,7 @@ const COLORS = {
 
 // ---------- DOM REFS ----------
 // Cache DOM nodes used by the script so code is easier to read.
+const app = document.getElementById('app');           // root app node - used to toggle subtitle visibility
 const landing = document.getElementById('landing');
 const startBtn = document.getElementById('start-btn');
 const backBtn = document.getElementById('back-btn');
@@ -275,6 +276,9 @@ function renderPercentages(pctObj){
 
 // Show result with percentages and update URL with compact token (?t=...)
 function showResultWithPercent(key, pctObj){
+  // remove quiz-active so subtitle is visible on the result page
+  if(app) app.classList.remove('quiz-active');
+
   // hide quiz
   quizSection.classList.add('hidden');
   quizSection.setAttribute('aria-hidden', 'true');
@@ -321,6 +325,9 @@ function showResultWithPercent(key, pctObj){
 
 // Reset for a fresh randomized run (prepares new shuffled questions)
 retakeBtn.addEventListener('click', () => {
+  // ensure subtitle hides while retaking
+  if(app) app.classList.add('quiz-active');
+
   prepareRun();
   index = 0;
   quizSection.classList.remove('hidden');
@@ -353,6 +360,9 @@ function checkUrlToken(){
   if(token){
     const data = decodeToken(token);
     if(data && data.r && data.p){
+      // ensure subtitle is visible for direct result links
+      if(app) app.classList.remove('quiz-active');
+
       // hide landing + quiz and show decoded result
       if(landing){
         landing.classList.add('hidden');
@@ -404,6 +414,10 @@ function checkUrlToken(){
 if(startBtn){
   startBtn.addEventListener('click', () => {
     prepareRun();
+
+    // mark the app as quiz-active so subtitle hides on question pages
+    if(app) app.classList.add('quiz-active');
+
     if(landing){
       landing.classList.add('hidden');
       landing.setAttribute('aria-hidden', 'true');

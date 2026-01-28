@@ -39,6 +39,11 @@ main#app{
   gap:12px;
 }
 
+/* when the quiz is active, hide the subtitle so it doesn't show above the questions */
+main#app.quiz-active .subtitle {
+  display: none !important;
+}
+
 /* Header */
 header h1{
   margin:0 0 6px 0;
@@ -50,7 +55,20 @@ header h1{
 /* Landing: hero spans full width on its own line */
 #landing{ display:flex; gap:16px; align-items:flex-start; padding:10px 0; flex-direction:column; }
 .hero{ width:100%; display:flex; align-items:center; justify-content:center; }
-#hero-img{ width:100%; max-height:320px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:linear-gradient(180deg,#081226,#091a2e) }
+
+/* hero: show full image without cropping (object-fit: contain).
+   This prevents left/right chopping on mobile. Note: may show letterbox space. */
+#hero-img{
+  width:100%;
+  max-height:320px;
+  height:auto;
+  object-fit:contain;
+  object-position:center;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.04);
+  background:linear-gradient(180deg,#081226,#091a2e);
+}
+
 .landing-copy{
   width:100%;
   color:var(--muted);
@@ -88,7 +106,14 @@ header h1{
 
 /* Question box */
 #question-box{ background: var(--surface); padding:16px; border-radius:10px; margin-top:8px }
-#question-title{ margin:0 0 12px 0; color:var(--card); font-size:1.05rem }
+
+/* Make the question title slightly larger than choices */
+#question-title{
+  margin:0 0 12px 0;
+  color:var(--card);
+  font-size:1.20rem;
+  line-height:1.2;
+}
 #choices{ display:grid; gap:10px; grid-template-columns: 1fr }
 
 /* Choice buttons (mobile friendly sizes) */
@@ -163,9 +188,9 @@ footer{ margin-top:6px; text-align:center; color:var(--muted); font-size:0.85rem
 @media (max-width:660px){
   main#app{ padding:16px }
   header h1{ font-size:1.25rem }
-  #hero-img{ height:200px }
+  #hero-img{ max-height:200px }
   .cta{ padding:12px 16px; font-size:1rem }
-  #question-title{ font-size:1rem }
+  #question-title{ font-size:1.05rem } /* slightly smaller on phone */
   .choice{ padding:12px; min-height:56px; font-size:1rem }
   #result-image-wrap{ width:160px; height:160px }
   .percent-label{ width:60px; font-size:0.9rem }
