@@ -151,7 +151,7 @@ header h1{
 }
 #result-label{ font-weight:800; font-size:1.6rem; color:var(--accent) }
 
-/* result image — increased to 360x360 */
+ /* result image — increased to 360x360 */
 #result-image-wrap{
   width:360px;
   height:360px;
@@ -165,12 +165,32 @@ header h1{
 #result-img{ width:100%; height:100%; object-fit:cover }
 
 /* percentages */
-.percent-list{ width:100%; max-width:480px; display:flex; flex-direction:column; gap:8px; margin-top:6px }
+.percent-list{ width:100%; max-width:480px; display:flex; flex-direction:column; gap:8px; margin-top:6px; margin-bottom:14px; }
 .percent-row{ display:flex; align-items:center; gap:10px }
 .percent-label{ width:70px; text-align:left; color:var(--muted); font-size:0.95rem }
 .percent-bar-wrap{ flex:1; background:var(--bar-bg); height:12px; border-radius:8px; overflow:hidden }
 .percent-bar{ height:100%; width:0%; transition:width .6s ease; }
 .percent-value{ width:46px; text-align:right; color:var(--muted); font-size:0.95rem }
+
+/* NOTABLE PLAYERS */
+.notables{
+  width:100%;
+  max-width:480px;
+  color:var(--muted);
+  font-size:0.95rem;
+  margin-top:14px; /* increased spacing to give breathing room under the bars */
+  text-align:left;
+}
+.notables .notables-heading{
+  font-weight:700;
+  color:var(--card);
+  margin-bottom:6px;
+  font-size:0.95rem;
+}
+.notables .notables-list{
+  display:block;
+  line-height:1.3;
+}
 
 /* result actions */
 .result-actions{ display:flex; gap:8px; justify-content:center; margin-top:12px; flex-wrap:wrap }
@@ -195,4 +215,5 @@ footer{ margin-top:6px; text-align:center; color:var(--muted); font-size:0.85rem
   #result-image-wrap{ width:160px; height:160px }
   .percent-label{ width:60px; font-size:0.9rem }
   .percent-value{ width:44px; font-size:0.9rem }
+  .notables{ font-size:0.9rem }
 }
