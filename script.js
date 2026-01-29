@@ -11,10 +11,12 @@
 const QUESTIONS = [
   { q: "Pick a food before your set", choices: ["Chips", "Fruit", "Granola or Protein", "None/Other"] },
   { q: "Preferred warm-up", choices: ["Stretch", "Blink training", "Meditate", "Comboing a CPU"] },
-  { q: "Your mantra", choices: ["Do whatever it takes to win", "Turn my brain off and schmove", "I love hanging spending quality time with my friend"] },
-  { q: "Your pop-off of choice", choices: ["Fist pump", "Calm nod", "Chair throw"] },
-  { q: "Best post-match drink", choices: ["Soda", "Water", "Energy drink"] },
-  { q: "Favorite current top 3 player", choices: ["Zain", "Cody Schwab", "Hungrybox"] }
+  { q: "Your mantra", choices: ["Do whatever it takes to win", "Turn my brain off and schmove", "I love spending quality time with my friend"] },
+  { q: "Your pop-off of choice", choices: ["Fist pump", "Calm nod", "Yell"] },
+  { q: "Best post-match drink", choices: ["Tears", "Water", "Energy drink"] },
+  { q: "Favorite current top 3 player", choices: ["Zain", "Cody Schwab", "Hungrybox"] },
+  { q: "You play Rock, Paper, Scissors for ports and tie the first two rounds throwing Rock. Which do you throw next?", choices: ["Rock, again.", "Paper, of course.", "Scissors, mindgames."] },
+  { q: "Does your gamer tag have an Acronym, Initialism, or your Name in it?", choices: ["Yes", "No"] }
 ];
 
 // ---------- RESULTS ----------
@@ -23,7 +25,7 @@ const RESULTS = {
     title: "Heart",
     desc: "You win with passion. You rely on looking into the soul of your opponent and hard reading their options.",
     image: "assets/heart.png",
-    notables: ["N0ne", "Mang0", "Scar", "Vintage"]
+    notables: ["N0ne", "Mang0", "Vintage"]
   },
   Body: {
     title: "Body",
