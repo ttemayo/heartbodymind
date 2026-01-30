@@ -13,8 +13,8 @@ const QUESTIONS = [
   { q: "Preferred warm-up", choices: ["Stretch", "Blink training", "Meditate", "Comboing a CPU"] },
   { q: "Your mantra", choices: ["Do whatever it takes to win", "Turn my brain off and schmove", "I love spending quality time with my friend"] },
   { q: "Your pop-off of choice", choices: ["Fist pump", "Calm nod", "Yell"] },
-  { q: "Best post-match drink", choices: ["Tears", "Water", "Energy drink"] },
-  { q: "Favorite current top 3 player", choices: ["Zain", "Cody Schwab", "Hungrybox"] },
+  { q: "Best post-match drink", choices: ["Nothing", "Water", "Energy drink"] },
+  { q: "Favorite current top 3 Melee player", choices: ["Zain", "Cody Schwab", "Hungrybox"] },
   { q: "You play Rock, Paper, Scissors for ports and tie the first two rounds throwing Rock. Which do you throw next?", choices: ["Rock, again.", "Paper, of course.", "Scissors, mindgames."] },
   { q: "Does your gamer tag have an Acronym, Initialism, or your Name in it?", choices: ["Yes", "No"] }
 ];
@@ -25,13 +25,13 @@ const RESULTS = {
     title: "Heart",
     desc: "You win with passion. You rely on looking into the soul of your opponent and hard reading their options.",
     image: "assets/heart.png",
-    notables: ["N0ne", "Mang0", "Vintage"]
+    notables: ["N0ne", "Mang0", "Hungrybox", "Vintage"]
   },
   Body: {
     title: "Body",
     desc: "You brute force your way to glory. You insist and focus on perfecting your punish game.",
     image: "assets/body.png",
-    notables: ["Zain", "Cody Schwab", "Jmook"]
+    notables: ["Zain", "Cody Schwab", "Jmook", "Wizzrobe"]
   },
   Mind: {
     title: "Mind",
