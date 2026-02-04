@@ -23,9 +23,7 @@
     <!-- Landing / intro screen -->
     <section id="landing" aria-hidden="false">
       <div class="hero">
-        <!-- Hero image now lives in assets/ -->
-        <!-- Replace assets/hero.png with your own image file in the assets/ folder -->
-        <!-- Recommended hero size: 1800×640 (JPEG/WebP). If you supply multiple sizes, add srcset. -->
+        <!-- Hero size: 1800×640 (JPEG/WebP) use srcset for multiple sizes -->
         <img src="assets/hero.png" alt="Quiz hero graphic" id="hero-img"/>
       </div>
 
@@ -46,7 +44,7 @@
     <!-- Quiz section (hidden until Start) -->
     <section id="quiz" class="hidden" aria-live="polite" aria-hidden="true">
       <div id="progress-row">
-        <!-- Back button appears when user passes first question -->
+        <!-- Back button appears when user answers first question -->
         <button id="back-btn" class="back hidden" aria-hidden="true">← Back</button>
         <div id="progress">
           <div id="progress-bar" style="width:0%"></div>

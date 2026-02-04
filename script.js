@@ -1,11 +1,9 @@
-// PARODY quiz: answers don't matter. final result is random.
-// Small, dependency-free client-side script.
-// Updated: randomized question order per-start, randomized choices per-question, Back support.
-// NOTE: comments are intentionally preserved and should not be removed unless absolutely necessary.
+// PARODY quiz: answers don't matter. final result is random :) no one look here
+// Dependency-free client-side script.
 
 // ---------- QUESTIONS ----------
 // Each entry: { q: "question text", choices: [ ... ] }
-// You may optionally add an `image` property to any question:
+// Optionally add an `image` property to any question:
 //   { q: "Example", choices: [...], image: "assets/q1-1800x640.png" }
 // If no `image` property is present, no space will be shown.
 const QUESTIONS = [

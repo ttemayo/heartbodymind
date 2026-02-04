@@ -39,7 +39,7 @@ main#app{
   gap:12px;
 }
 
-/* when the quiz is active, hide the subtitle so it doesn't show above the questions */
+/* when quiz is active, hide the subtitle so it doesn't show above the questions */
 main#app.quiz-active .subtitle {
   display: none !important;
 }
