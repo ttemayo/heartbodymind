@@ -35,7 +35,7 @@ const RESULTS = {
     title: "Mind",
     desc: "You overthink things and it works. You map out the matchups, and have flowcharts for situations that others probably don't even consider.",
     image: "assets/mind.png",
-    notables: ["Junebug", "Ginger", "Bob-omb"]
+    notables: ["Junebug", "Ginger", "Llod", "Bob-omb"]
   }
 };
 
